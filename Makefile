@@ -1,3 +1,5 @@
+PY_PACKAGE = opsmop
+
 requirements:
 	pip install -r requirements.txt --trusted-host pypi.org --trusted-host files.pypi.org --trusted-host files.pythonhosted.org
 
@@ -45,3 +47,12 @@ isort:
 gource:
 	gource -s .06 -1280x720 --auto-skip-seconds .1 --hide mouse,progress,filenames --key --multi-sampling --stop-at-end --file-idle-time 0 --max-files 0  --background-colour 000000 --font-size 22 --title "OpsMop" --output-ppm-stream - --output-framerate 30 | avconv -y -r 30 -f image2pipe -vcodec ppm -i - -b 65536K movie.mp4
 
+check-pypi-packaging:
+	rm -f dist/* \
+	&& python3 ./setup.py sdist bdist_wheel \
+	&& pip3 install dist/*.tar.gz \
+	&& ( opsmop | grep -c "opsmop - (C) 2018, Michael DeHaan LLC" ) \
+	&& pip3 show $(PY_PACKAGE) \
+	&& twine check ./dist/* \
+	&& python3 -c "import opsmop; print(opsmop.__version__)" \
+	&& pip3 show -f $(PY_PACKAGE) | ( grep test && exit 1 || :) \
