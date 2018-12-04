@@ -1,13 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+import setuptools
 
-setup(name='opsmop',
-      version='0.1',
-      description='elite configuration management',
-      author='Michael DeHaan',
-      author_email='michael@michaeldehaan.net',
-      url='https://opsmop.io/',
-      packages=['opsmop'],
-      scripts=['bin/opsmop']
-     )
+setuptools.setup(use_scm_version=True,
+                 packages=setuptools.find_packages(exclude=['docs', 'tests']), )
