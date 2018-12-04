@@ -99,3 +99,7 @@ class Cli(object):
 
         print("")
         sys.exit(0)
+
+
+def main():
+    Cli(sys.argv).go()
